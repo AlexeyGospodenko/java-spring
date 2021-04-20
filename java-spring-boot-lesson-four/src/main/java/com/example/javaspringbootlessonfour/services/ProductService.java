@@ -1,19 +1,18 @@
 package com.example.javaspringbootlessonfour.services;
 
 import com.example.javaspringbootlessonfour.entities.Product;
-import com.example.javaspringbootlessonfour.repositories.ProductRepository;
+import com.example.javaspringbootlessonfour.repositories.ProductDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
 public class ProductService {
 
-    private ProductRepository productRepository;
+    private ProductDAO productRepository;
 
     @Autowired
-    public void setProductRepository(ProductRepository productRepository) {
+    public void setProductRepository(ProductDAO productRepository) {
         this.productRepository = productRepository;
     }
 
@@ -26,7 +25,7 @@ public class ProductService {
     }
 
     public void remove(Long id) {
-        productRepository.remove(id);
+        productRepository.deleteById(id);
     }
 
     public void add(Product product) {
@@ -34,6 +33,6 @@ public class ProductService {
     }
 
     public void update(Product product) {
-        productRepository.update(product);
+        productRepository.saveOrUpdate(product);
     }
 }
