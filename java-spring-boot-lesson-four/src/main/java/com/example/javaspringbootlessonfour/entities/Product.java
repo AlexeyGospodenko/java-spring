@@ -4,8 +4,8 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
+@Table(name = "products")
 public class Product {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -21,12 +21,6 @@ public class Product {
     private BigDecimal price;
 
     public Product() {
-    }
-
-    public Product(String name, String description, BigDecimal price) {
-        this.title = name;
-        this.description = description;
-        this.price = price;
     }
 
     public Long getId() {
