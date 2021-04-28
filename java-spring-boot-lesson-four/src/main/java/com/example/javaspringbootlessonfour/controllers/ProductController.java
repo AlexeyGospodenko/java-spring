@@ -5,21 +5,28 @@ import com.example.javaspringbootlessonfour.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.math.BigDecimal;
 
 @Controller
 @RequestMapping("/product")
 public class ProductController {
-
     @Autowired
     private ProductService productService;
 
     @GetMapping
-    public String indexPage(Model model) {
-        model.addAttribute("products", productService.getAllProduct());
+    public String indexPage(Model model,
+                            @RequestParam(name = "titleFilter", required = false) String titleFilter,
+                            @RequestParam(name = "minPrice", required = false) BigDecimal minPriceFilter,
+                            @RequestParam(name = "maxPrice", required = false) BigDecimal maxPriceFilter,
+                            @RequestParam(defaultValue = "0") Integer pageNum,
+                            @RequestParam(defaultValue = "5") Integer pageSize) {
+        if (titleFilter != null || minPriceFilter != null || maxPriceFilter != null) {
+           model.addAttribute("products", productService.getProductsWithFilters(titleFilter, minPriceFilter, maxPriceFilter));
+        } else {
+            model.addAttribute("products", productService.getAllProduct(pageNum, pageSize));
+        }
         return "product_views/index";
     }
 
@@ -32,11 +39,7 @@ public class ProductController {
 
     @PostMapping("/product_update")
     public String updateProduct(Product product) {
-        if (product.getId() == null) {
-            productService.add(product);
-        } else {
-            productService.update(product);
-        }
+        productService.addOrUpdate(product);
         return "redirect:/product";
     }
 
