@@ -1,4 +1,4 @@
-package com.example.configuration;
+package com.example.hibernate.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;

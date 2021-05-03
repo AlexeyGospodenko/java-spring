@@ -14,12 +14,11 @@ public class ProductSpecification {
         return (root, query, builder) -> builder.like(root.get("title"), "%" + titleFilter + "%");
     }
 
-    public static Specification<Product> priceMin(BigDecimal minPriceFilter) {
-        return (root, query, builder) -> builder.greaterThan(root.get("price"), minPriceFilter);
+    public static Specification<Product> greaterThan(BigDecimal minPrice) {
+        return (root, query, builder) -> builder.greaterThanOrEqualTo(root.get("price"), minPrice);
     }
 
-    public static Specification<Product> priceMax(BigDecimal maxPriceFilter) {
-        return (root, query, builder) -> builder.lessThan(root.get("price"), maxPriceFilter);
+    public static Specification<Product> lessThan(BigDecimal maxPrice) {
+        return (root, query, builder) -> builder.lessThanOrEqualTo(root.get("price"), maxPrice);
     }
-
 }

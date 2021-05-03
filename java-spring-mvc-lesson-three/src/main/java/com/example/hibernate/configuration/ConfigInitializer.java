@@ -1,4 +1,4 @@
-package com.example.configuration;
+package com.example.hibernate.configuration;
 
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
