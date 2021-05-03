@@ -6,13 +6,12 @@ import com.example.javaspringbootlessonfour.repositories.specifications.ProductS
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProductService {
@@ -25,16 +24,8 @@ public class ProductService {
     }
 
     @Transactional
-    public List<Product> getAllProduct(Integer pageNum, Integer PageSize) {
-        Pageable paging = PageRequest.of(pageNum, PageSize);
-        Page<Product> pagedResult = productRepository.findAll(paging);
-        return pagedResult.getContent();
-
-    }
-
-    @Transactional
-    public Product getById(Long id) {
-        return productRepository.findById(id).get();
+    public Optional<Product> getById(Long id) {
+        return productRepository.findById(id);
     }
 
     @Transactional
@@ -47,38 +38,28 @@ public class ProductService {
         productRepository.save(product);
     }
 
-//    @Transactional
-//    public List<Product> getByMinPrice (BigDecimal minPrice) {
-//        //return productRepository.findProductByPriceIsGreaterThan(minPrice);
-//    }
-
-//    @Transactional
-//    public List<Product> getByMaxPrice (BigDecimal maxPrice) {
-//        //return productRepository.findProductByPriceIsLessThan(maxPrice);
-//    }
-
-//    @Transactional
-//    public List<Product> getBetweenMinAndMaxPrice (BigDecimal minPrice, BigDecimal maxPrice) {
-//        return productRepository.findProductByPriceIsBetween(minPrice, maxPrice);
-//    }
-
     @Transactional
-    public List<Product> getProductsWithFilters(String nameFilter, BigDecimal minPriceFilter, BigDecimal maxPriceFilter) {
-//		if (!nameFilter.contains("%")) {
-//			nameFilter = String.join("", "%", nameFilter, "%");
-//		}
-//		return productRepository.findProductByTitleLike(nameFilter);
-        Specification<Product> specification = Specification.where(null);
-        if (nameFilter != null) {
-            specification = specification.and(ProductSpecification.titleLike(nameFilter));
-        }
-        if (minPriceFilter != null) {
-            specification = specification.and(ProductSpecification.priceMin(minPriceFilter));
-        }
-        if (maxPriceFilter != null) {
-            specification = specification.and(ProductSpecification.priceMax(maxPriceFilter));
-        }
-        return productRepository.findAll(specification);
-    }
+    public Page<Product> getByParams(
+                                     Optional<String> nameFilter,
+                                     Optional<BigDecimal> minPrice,
+                                     Optional<BigDecimal> maxPrice,
+                                     Optional<Integer> pageNum,
+                                     Optional<Integer> pageSize) {
 
+        Specification<Product> specification = Specification.where(null);
+        if (nameFilter.isPresent()) {
+            specification = specification.and(ProductSpecification.titleLike(nameFilter.get()));
+        }
+
+        if (minPrice.isPresent()) {
+            specification = specification.and(ProductSpecification.greaterThan(minPrice.get()));
+        }
+
+        if (maxPrice.isPresent()) {
+            specification = specification.and(ProductSpecification.lessThan(maxPrice.get()));
+        }
+
+        return productRepository.findAll(specification,
+                PageRequest.of(pageNum.orElse(1) - 1, pageSize.orElse(4)));
+    }
 }
