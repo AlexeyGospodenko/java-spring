@@ -4,8 +4,6 @@
 <body>
 
 <!--
-               TODO оживить кнопки НАЗАД и ВПЕРЕД
-               TODO добавить выбор "по сколько элементов отображать"
                TODO добавить сортировку по каждому полю
                TODO (если не успели сдать ДЗ до 30.04 - до занятия) выделить в фрагменты повторяющийся код
 -->
@@ -18,10 +16,10 @@
             </div>
             <div class="col-9">
                 <form class="form-inline" th:method="get">
-                    <input type="number" th:value="${param.min}" class="form-control-md" id="min"
-                           name="min" placeholder="Min">
-                    <input type="number" th:value="${param.max}" class="form-control-md" id="max"
-                           name="max" placeholder="Max">
+                    <input type="text" th:value="${param.minPrice}" class="form-control-md" id="min-filter"
+                           name="minPrice" placeholder="Min price">
+                    <input type="text" th:value="${param.maxPrice}" class="form-control-md" id="max-filter"
+                           name="maxPrice" placeholder="Max price">
                     <input type="text" th:value="${param.titleFilter}" class="form-control-md" id="title-filter"
                            name="titleFilter" placeholder="Find">
                     <button type="submit" class="btn btn-outline-dark"><i class="fas fa-search"></i></button>
@@ -30,14 +28,14 @@
             </div>
         </div>
 
-        <table class="table">
+        <table id="selectedColumn" class="table">
             <thead>
             <tr>
-                <th scope="col">id</th>
-                <th scope="col">Name</th>
-                <th scope="col">Description</th>
-                <th scope="col">Price</th>
-                <th scope="col">Actions</th>
+                <th class="th-sm" scope="col">id</th>
+                <th class="th-sm" scope="col">Name</th>
+                <th class="th-sm" scope="col">Description</th>
+                <th class="th-sm" scope="col">Price</th>
+                <th class="th-sm" scope="col">Actions</th>
             </tr>
             </thead>
             <tbody>
@@ -56,30 +54,70 @@
 
             <tr th:unless="${products.hasContent}">
                 <td colspan="5">No data</td>
-            </tr>
             </tbody>
         </table>
+
+        <ul class="pagination pagination-sm justify-content-end">
+            <li class="page-item"><a class="page-link text-dark border-dark" th:href="@{/product(
+                    pageNum=${products.number + 1},
+                    pageSize=3,
+                    titleFilter=${param.titleFilter},
+                    minPrice=${param.minPrice},
+                    maxPrice=${param.maxPrice}
+                    )}">3</a></li>
+            <li class="page-item"><a class="page-link text-dark border-dark" th:href="@{/product(
+                    pageNum=${products.number + 1},
+                    pageSize=5,
+                    titleFilter=${param.titleFilter},
+                    minPrice=${param.minPrice},
+                    maxPrice=${param.maxPrice}
+                    )}">5</a></li>
+            <li class="page-item"><a class="page-link text-dark border-dark" th:href="@{/product(
+                    pageNum=${products.number + 1},
+                    pageSize=7,
+                    titleFilter=${param.titleFilter},
+                    minPrice=${param.minPrice},
+                    maxPrice=${param.maxPrice}
+                    )}">7</a></li>
+        </ul>
     </div>
 
     <div th:if="${products.hasContent()}">
         <nav aria-label="product list">
             <ul class="pagination justify-content-center">
-                <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                <li th:each="num : ${#numbers.sequence(1, products.totalPages)}"
-                    class="page-item"
-                    th:classappend="${num == products.number + 1} ? 'active'">
-                    <a class="page-link" th:href="@{/product(
-                    page=${num},
-                    size=${products.size},
+                <li th:if="${products.number} > 0"
+                    class="page-item">
+                    <a class="page-link text-dark border-dark" th:href="@{/product(
+                    pageNum=${products.number},
+                    pageSize=${products.size},
                     titleFilter=${param.titleFilter},
                     minPrice=${param.minPrice},
                     maxPrice=${param.maxPrice}
-                    )}">[[${num}]]</a>
+                    )}">Previous</a></li>
+                <li th:each="pageNum : ${#numbers.sequence(1, products.totalPages)}"
+                    class="page-item"
+                    th:classappend="${pageNum == products.number + 1} ? 'active'">
+                    <a class="page-link text-dark border-dark" th:href="@{/product(
+                    pageNum=${pageNum},
+                    pageSize=${products.size},
+                    titleFilter=${param.titleFilter},
+                    minPrice=${param.minPrice},
+                    maxPrice=${param.maxPrice}
+                    )}">[[${pageNum}]]</a>
                 </li>
-                <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                <li th:if="${products.number} + 1 < ${products.totalPages}"
+                    class="page-item">
+                    <a class="page-link text-dark border-dark" th:href="@{/product(
+                    pageNum=${products.number + 2},
+                    pageSize=${products.size},
+                    titleFilter=${param.titleFilter},
+                    minPrice=${param.minPrice},
+                    maxPrice=${param.maxPrice}
+                    )}">Next</a></li>
             </ul>
         </nav>
     </div>
+
 </div>
 
 <script th:replace="fragments/footer :: scripts"/>
