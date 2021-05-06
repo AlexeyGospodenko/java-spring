@@ -1,5 +1,7 @@
 package com.example.javaspringbootlessonfour.services;
 
+import com.example.javaspringbootlessonfour.dto.ProductDTO;
+import com.example.javaspringbootlessonfour.dto.ProductMapper;
 import com.example.javaspringbootlessonfour.entities.Product;
 import com.example.javaspringbootlessonfour.repositories.ProductRepository;
 import com.example.javaspringbootlessonfour.repositories.specifications.ProductSpecification;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -24,7 +27,12 @@ public class ProductService {
     }
 
     @Transactional
-    public Optional<Product> getById(Long id) {
+    public List<Product> findAll() {
+        return productRepository.findAll();
+    }
+
+    @Transactional
+    public Optional<Product> findById(Long id) {
         return productRepository.findById(id);
     }
 
@@ -34,7 +42,7 @@ public class ProductService {
     }
 
     @Transactional
-    public void addOrUpdate(Product product) {
+    public void createOrUpdate(Product product) {
         productRepository.save(product);
     }
 
@@ -62,4 +70,13 @@ public class ProductService {
         return productRepository.findAll(specification,
                 PageRequest.of(pageNum.orElse(1) - 1, pageSize.orElse(4)));
     }
+
+    public ProductDTO findByIdDTO(Long id) {
+        return ProductMapper.MAPPER.fromProduct(productRepository.findById(id).get());
+    }
+
+    public List<ProductDTO> findAllDTO () {
+        return ProductMapper.MAPPER.fromProductList(productRepository.findAll());
+    }
+
 }
