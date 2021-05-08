@@ -1,0 +1,31 @@
+GET http://localhost:8080/api/v1/product/list
+
+###
+
+GET http://localhost:8080/api/v1/product/22/id
+
+###
+
+POST http://localhost:8080/api/v1/product/
+Content-Type: application/json
+
+{
+  "title": "New iPad",
+  "description": "New More size - more cost",
+  "price": 1500
+}
+
+###
+
+PUT http://localhost:8080/api/v1/product/
+Content-Type: application/json
+
+{
+  "id": 22,
+  "title": "111 New iPad",
+  "description": "111 New More size - more cost",
+  "price": 1500
+}
+###
+
+DELETE http://localhost:8080/api/v1/product/4/id
