@@ -1,5 +1,6 @@
 package com.example.javaspringbootlessonfour.rest;
 
+import com.example.javaspringbootlessonfour.dto.ProductDTO;
 import com.example.javaspringbootlessonfour.entities.Product;
 import com.example.javaspringbootlessonfour.services.NotFoundException;
 import com.example.javaspringbootlessonfour.services.ProductService;
@@ -24,13 +25,15 @@ public class ProductRestController {
     }
 
     @GetMapping(path = "/{id}/id", produces = "application/json")
-    public Product findById(@PathVariable("id") Long id) {
-        return service.findById(id).orElseThrow(NotFoundException::new);
+    public ProductDTO findById(@PathVariable("id") Long id) {
+        //return service.findById(id).orElseThrow(NotFoundException::new);
+        return service.findByIdDTO(id);
     }
 
     @GetMapping(path = "/list", produces = "application/json")
-    public List<Product> findAll() {
-        return service.findAll();
+    public List<ProductDTO> findAll() {
+        //return service.findAll();
+        return service.findAllDTO();
     }
 
     @PostMapping(consumes = "application/json", produces = "application/json")
