@@ -2,7 +2,7 @@ GET http://localhost:8080/api/v1/product/list
 
 ###
 
-GET http://localhost:8080/api/v1/product/22/id
+GET http://localhost:8080/api/v1/product/10/id
 
 ###
 
