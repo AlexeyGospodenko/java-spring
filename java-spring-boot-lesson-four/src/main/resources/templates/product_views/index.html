@@ -3,11 +3,6 @@
 <head th:replace="fragments/head :: header"/>
 <body>
 
-<!--
-               TODO добавить сортировку по каждому полю
-               TODO (если не успели сдать ДЗ до 30.04 - до занятия) выделить в фрагменты повторяющийся код
--->
-
 <div class="container">
     <div class="col-10 mx-auto mt-3">
         <div class="row">
@@ -28,14 +23,14 @@
             </div>
         </div>
 
-        <table id="selectedColumn" class="table">
+        <table class="table">
             <thead>
             <tr>
-                <th class="th-sm" scope="col">id</th>
-                <th class="th-sm" scope="col">Name</th>
-                <th class="th-sm" scope="col">Description</th>
-                <th class="th-sm" scope="col">Price</th>
-                <th class="th-sm" scope="col">Actions</th>
+                <th scope="col" th:include="fragments/sort_header :: sort_header('Id', 'id')">id</th>
+                <th scope="col" th:include="fragments/sort_header :: sort_header('Title', 'title')">Title</th>
+                <th scope="col" th:include="fragments/sort_header :: sort_header('Description', 'description')">Description</th>
+                <th scope="col" th:include="fragments/sort_header :: sort_header('Price', 'price')">Price</th>
+                <th scope="col">Actions</th>
             </tr>
             </thead>
             <tbody>
@@ -54,33 +49,34 @@
 
             <tr th:unless="${products.hasContent}">
                 <td colspan="5">No data</td>
+            </tr>
             </tbody>
         </table>
+    </div>
 
-        <ul class="pagination pagination-sm justify-content-end">
-            <li class="page-item"><a class="page-link text-dark border-dark" th:href="@{/product(
+    <ul class="pagination pagination-sm justify-content-end">
+        <li class="page-item"><a class="page-link text-dark border-dark" th:href="@{/product(
                     pageNum=${products.number + 1},
                     pageSize=3,
                     titleFilter=${param.titleFilter},
                     minPrice=${param.minPrice},
                     maxPrice=${param.maxPrice}
                     )}">3</a></li>
-            <li class="page-item"><a class="page-link text-dark border-dark" th:href="@{/product(
+        <li class="page-item"><a class="page-link text-dark border-dark" th:href="@{/product(
                     pageNum=${products.number + 1},
                     pageSize=5,
                     titleFilter=${param.titleFilter},
                     minPrice=${param.minPrice},
                     maxPrice=${param.maxPrice}
                     )}">5</a></li>
-            <li class="page-item"><a class="page-link text-dark border-dark" th:href="@{/product(
+        <li class="page-item"><a class="page-link text-dark border-dark" th:href="@{/product(
                     pageNum=${products.number + 1},
                     pageSize=7,
                     titleFilter=${param.titleFilter},
                     minPrice=${param.minPrice},
                     maxPrice=${param.maxPrice}
                     )}">7</a></li>
-        </ul>
-    </div>
+    </ul>
 
     <div th:if="${products.hasContent()}">
         <nav aria-label="product list">
@@ -117,9 +113,8 @@
             </ul>
         </nav>
     </div>
-
 </div>
 
-<script th:replace="fragments/footer :: scripts"/>
+    <script th:replace="fragments/footer :: scripts"/>
 </body>
 </html>

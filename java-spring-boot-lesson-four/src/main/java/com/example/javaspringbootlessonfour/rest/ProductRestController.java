@@ -2,7 +2,7 @@ package com.example.javaspringbootlessonfour.rest;
 
 import com.example.javaspringbootlessonfour.dto.ProductDTO;
 import com.example.javaspringbootlessonfour.entities.Product;
-import com.example.javaspringbootlessonfour.services.NotFoundException;
+import com.example.javaspringbootlessonfour.services.exceptions.NotFoundException;
 import com.example.javaspringbootlessonfour.services.ProductService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;

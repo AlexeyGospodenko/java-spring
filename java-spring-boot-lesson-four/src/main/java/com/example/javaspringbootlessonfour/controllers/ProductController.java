@@ -1,7 +1,7 @@
 package com.example.javaspringbootlessonfour.controllers;
 
 import com.example.javaspringbootlessonfour.entities.Product;
-import com.example.javaspringbootlessonfour.services.NotFoundException;
+import com.example.javaspringbootlessonfour.services.exceptions.NotFoundException;
 import com.example.javaspringbootlessonfour.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,22 +26,32 @@ public class ProductController {
                             @RequestParam(name = "minPrice", required = false) Optional<BigDecimal> minPrice,
                             @RequestParam(name = "maxPrice", required = false) Optional<BigDecimal> maxPrice,
                             @RequestParam(name = "pageNum", required = false) Optional<Integer> pageNum,
-                            @RequestParam(name = "pageSize", required = false) Optional<Integer> pageSize) {
+                            @RequestParam(name = "pageSize", required = false) Optional<Integer> pageSize,
+	                        @RequestParam(name = "sortField", required = false) Optional<String> sortField,
+                            @RequestParam(name = "sortOrder", required = false) Optional<String> sortOrder) {
 
-        model.addAttribute("products", productService.getByParams(titleFilter, minPrice, maxPrice, pageNum, pageSize));
+        model.addAttribute("products",
+                productService.getByParams(
+                        titleFilter,
+                        minPrice,
+                        maxPrice,
+                        pageNum,
+                        pageSize,
+                        sortField,
+                        sortOrder));
         return "product_views/index";
     }
 
     @GetMapping("/{id}")
     public String editProduct(@PathVariable(value = "id") Long id,
                               Model model) {
-        model.addAttribute("product", productService.getById(id).orElseThrow(NotFoundException::new));
+        model.addAttribute("product", productService.findById(id).orElseThrow(NotFoundException::new));
         return "product_views/product_form";
     }
 
     @PostMapping("/product_update")
     public String updateProduct(Product product) {
-        productService.addOrUpdate(product);
+        productService.createOrUpdate(product);
         return "redirect:/product";
     }
 
