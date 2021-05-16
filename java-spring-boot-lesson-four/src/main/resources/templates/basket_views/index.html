@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: header"/>
+<body>
+<head th:replace="fragments/head :: navbar"/>
+<div class="container">
+    <div class="col-10 mx-auto mt-3">
+        <div class="row">
+            <div class="col-3">
+                <h1>Basket list</h1>
+            </div>
+        </div>
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">basket id</th>
+                <th scope="col">prod id</th>
+                <th scope="col">Title</th>
+                <th scope="col">Description</th>
+                <th scope="col">Price</th>
+                <th scope="col">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="product : ${products}">
+                <th scope="row" th:text="${product.getKey()}">1</th>
+                <th scope="row" th:text="${product.getValue().getId()}">1</th>
+                <th scope="row" th:text="${product.getValue().getTitle()}">1</th>
+                <th scope="row" th:text="${product.getValue().getDescription()}">1</th>
+                <th scope="row" th:text="${product.getValue().getPrice()}">1</th>
+                <th>
+                    <a class="btn btn-danger" th:href="@{/basket/delete/{id}(id = ${product.getKey()})}">
+                        <i class="far fa-trash-alt"></i></a>
+                </th>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<script th:replace="fragments/footer :: scripts"/>
+</body>
+</html>

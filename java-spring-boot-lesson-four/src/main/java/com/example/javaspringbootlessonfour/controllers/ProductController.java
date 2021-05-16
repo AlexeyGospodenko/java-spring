@@ -1,5 +1,6 @@
 package com.example.javaspringbootlessonfour.controllers;
 
+import com.example.javaspringbootlessonfour.entities.Basket;
 import com.example.javaspringbootlessonfour.entities.Product;
 import com.example.javaspringbootlessonfour.services.exceptions.NotFoundException;
 import com.example.javaspringbootlessonfour.services.ProductService;
@@ -17,8 +18,19 @@ import java.util.Optional;
 @RequestMapping("/product")
 public class ProductController {
 
-    @Autowired
+
     private ProductService productService;
+    private Basket basket;
+
+    @Autowired
+    public void setProductService(ProductService productService) {
+        this.productService = productService;
+    }
+
+    @Autowired
+    public void setBasket(Basket basket) {
+        this.basket = basket;
+    }
 
     @GetMapping
     public String indexPage(Model model,
@@ -47,6 +59,12 @@ public class ProductController {
                               Model model) {
         model.addAttribute("product", productService.findById(id).orElseThrow(NotFoundException::new));
         return "product_views/product_form";
+    }
+
+    @GetMapping("/addBasket/{id}")
+    public String basketAdd(@PathVariable(value = "id") Long id) {
+        basket.add(productService.findById(id).orElseThrow(NotFoundException::new));
+        return "redirect:/product";
     }
 
     @PostMapping("/product_update")
