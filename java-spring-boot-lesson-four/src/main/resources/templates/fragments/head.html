@@ -29,9 +29,9 @@
         </ul>
     </div>
 
-<!--    <form sec:authorize="isAuthenticated()" class="form-inline px-3" th:action="@{/basket}">-->
-<!--        <button class="btn btn-outline-primary">Shop basket</button>-->
-<!--    </form>-->
+    <form sec:authorize="isAuthenticated()" class="form-inline px-3" th:action="@{/basket}">
+        <button class="btn btn-outline-primary">Shop basket</button>
+    </form>
     <form sec:authorize="isAuthenticated()" class="form-inline" th:action="@{/logout}" method="post">
         <button class="btn btn-outline-success">
             Logout <span sec:authentication="principal.username"></span>
