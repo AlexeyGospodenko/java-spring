@@ -1,5 +1,6 @@
 package com.example.javaspringbootlessonfour.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,6 +22,7 @@ public class Role {
     @Column(name = "name", unique = true, nullable = false)
     private String name;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "roles")
     private List<User> users;
 }

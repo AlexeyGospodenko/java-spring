@@ -1,9 +1,11 @@
 package com.example.javaspringbootlessonfour.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Getter
 @Setter
@@ -26,4 +28,8 @@ public class Product {
 
     @Column(name = "price")
     private BigDecimal price;
+
+    @JsonIgnore
+    @ManyToMany(mappedBy = "products")
+    private List<User> users;
 }
